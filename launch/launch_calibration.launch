@@ -1,0 +1,16 @@
+<launch>
+  <!-- if not in standalone mode, rviz could be launched elsewhere--> 
+  <arg name="launch_rviz" default="0"/>
+
+  <!-- Loading the camera driver-->
+  <!-- for an unknown reason, it is better launching the camera driver on a different thread -->
+  <!--<node pkg="usb_cam" type="usb_cam_node" name="usb_cam_node" />-->
+
+  <!-- Loading the alvar marker tracker. If ausing another type of camera, this launch file might need adjustment. -->
+  <include file ="$(find sarafun_optoforce_calibration)/launch/track_alvar_no_kinect.launch"/>
+  
+  <!-- visualization tool -->
+  <node if="$(arg launch_rviz)" pkg="rviz" type="rviz" output="screen" name="rviz" args="-d $(find sarafun_optoforce_calibration)/cfg/rviz.rviz"/>
+  <!-- optoforce model insertion in the visualization -->
+  <include file ="$(find sarafun_optoforce_calibration)/launch/display_optoforce.launch"/>
+</launch>

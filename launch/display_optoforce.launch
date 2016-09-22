@@ -1,0 +1,6 @@
+<launch>
+  <param name="optoforce_board" command="cat $(find sarafun_optoforce_calibration)/urdf/optoforce_board.urdf" />
+  <!-- This transform contains the motion from the detected marker to the location of the optoforce main frame. See documentation -->
+  <node pkg="tf" type="static_transform_publisher" name="optoforce_location" args="0.150 0 0.022 0 0 0  /ar_marker_0 /optoforce  100"/>
+  <node name="display_calibration_pattern" pkg= "sarafun_optoforce_calibration" type= "display_calibration_pattern.py" output="screen" />
+</launch>
