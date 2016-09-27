@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<launch>
+  <param name="optoforce_board" command="cat $(find sarafun_optoforce_calibration)/urdf/optoforce_board.urdf" />
+  <!-- This transform contains the motion from the detected marker to the location of the optoforce main frame. See documentation -->
+  <!--<node pkg="tf" type="static_transform_publisher" name="optoforce_location" args="0.150 0 0.022 0 0 0  /ar_marker_0 /optoforce  100"/>-->
+  <!-- To set the pose of the sensor in the environment-->
+  <node pkg="tf" type="static_transform_publisher" name="optoforce_location" args="0.150 0 0.022 0 0 0  /world /optoforce  100"/>
+  <!--<node name="display_calibration_pattern" pkg= "sarafun_optoforce_calibration" type= "display_calibration_pattern.py" output="screen" />-->
+  <!-- for displaying the wrench-->
+  <node pkg="wrench_marker" type="wrench_marker_publisher" name="wrench_marker_publisher" >
+  	<remap from="wrench" to="optoforce_node/wrench_IRE005"/>
+  	<remap from="wrench" to="optoforce_node/wrench_IRE005"/>
+</launch>
