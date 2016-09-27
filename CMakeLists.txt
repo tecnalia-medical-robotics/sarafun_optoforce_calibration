@@ -8,7 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_srvs
   tf
   tf_conversions
-  usb_cam
+  #usb_cam
   visualization_msgs
 )
 
