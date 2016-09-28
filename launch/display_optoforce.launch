@@ -4,9 +4,9 @@
   <param name="optoforce_board" command="cat $(find sarafun_optoforce_calibration)/urdf/optoforce_board.urdf" />
   <!-- This transform contains the motion from the detected marker to the location of the optoforce main frame. See documentation -->
   
-  <node pkg="tf" type="static_transform_publisher" name="optoforce_location" args="0.150 0.00 0.022 0.0 0 0  /ar_marker_0 /optoforce  100"/>
+  <!--<node pkg="tf" type="static_transform_publisher" name="optoforce_location" args="0.150 0.00 0.022 0.0 0 0  /ar_marker_0 /optoforce  100"/>-->
   <!-- manual adjustment-->
-  <!--<node pkg="tf" type="static_transform_publisher" name="optoforce_location" args="0.150 -0.006 0.022 -0.01 0 0  /ar_marker_0 /optoforce  100"/> -->
+  <node pkg="tf" type="static_transform_publisher" name="optoforce_location" args="0.150 -0.006 0.022 -0.01 0 0  /ar_marker_0 /optoforce  100"/>
   
   <node pkg="tf" type="static_transform_publisher" name="IRE_location" args="0 0 0.0 0 0 0  /optoforce /IRE005 100"/>
   
