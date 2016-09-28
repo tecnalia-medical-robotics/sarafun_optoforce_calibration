@@ -48,6 +48,14 @@ class DisplayCalibrationPattern(object):
         self._object_marker.pose.orientation.z = 0
         self._object_marker.pose.orientation.w = 1.0
 
+        self._reference_frame = "/world"
+        if rospy.has_param('~reference_frame'):
+            self._reference_frame = rospy.get_param('~reference_frame')
+            rospy.loginfo("reference frame set to {}".format(self._reference_frame))
+        else:
+            rospy.logwarn("Private parameter {} undefined, let to the default value".format('~reference_frame',
+                                                                                            self._reference_frame))
+
         self._is_init_ok = True
         self._listener = tf.TransformListener()
         self._service = rospy.Service("optoforce_calibrate", Trigger, self.calibration_service_)
@@ -56,29 +64,30 @@ class DisplayCalibrationPattern(object):
         rospy.loginfo("[{}] Optoforce calibrate".format(rospy.get_name()))
 
         try:
-            (trans, rot) = self._listener.lookupTransform('/world', '/optoforce', rospy.Time(0))
+            (trans, rot) = self._listener.lookupTransform( self._reference_frame, '/optoforce', rospy.Time(0))
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             return TriggerResponse(True, "Exception raised")
         rospy.loginfo("Read t= {} rot = {}".format(trans, rot))
         msg = "Update launch file with the following indication:\n"
         msg+= "<node pkg=\"tf\" type=\"static_transform_publisher\" name=\"optoforce_world\""
-        msg+= " args=\"{} {} {} {} {} {} {} /world /optoforce_sensor  100\"/>".format(trans[0],
-                                                                              trans[1],
-                                                                              trans[2],
-                                                                              rot[0],
-                                                                              rot[1],
-                                                                              rot[2],
-                                                                              rot[3])
+        msg+= " args=\"{} {} {} {} {} {} {} {} /optoforce_sensor  100\"/>".format(trans[0],
+                                                                                      trans[1],
+                                                                                      trans[2],
+                                                                                      rot[0],
+                                                                                      rot[1],
+                                                                                      rot[2],
+                                                                                      rot[3],
+                                                                                      self._reference_frame)
         rospy.logwarn(msg)
         return TriggerResponse(True, msg)
-    
+
     def loop(self):
         while not rospy.is_shutdown():
 
             time_now = rospy.Time.now()
             self._marker_pub.publish(self._object_marker)
             rospy.sleep(0.01)
-        
+
 if __name__ == '__main__':
     rospy.init_node('debug_plane', anonymous=True)
     display = DisplayCalibrationPattern()
